@@ -1,0 +1,397 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block content %}
+<main>
+
+  <style>
+    .position-relative {
+      position: relative;
+    }
+    
+    .love-icon {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      font-size: 20px;
+      color: #cccccc;
+      background-color: #f0f0f0;
+      border-radius: 50%;
+      padding: 10px;
+      cursor: pointer;
+      transition: color 0.3s ease, background-color 0.3s ease;
+    }
+    
+    .love-icon.active {
+      color: red;
+      background-color: #ffe6e6;
+    }
+    
+    .card-img-top {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+    }
+    
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 5px 10px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    .close-btn:hover {
+      background-color: #0056b3;
+    }
+    
+    .carousel-section {
+      margin-bottom: 70px;
+    }
+    
+    .owl-nav button {
+      background-color: transparent;
+      border: none;
+      color: #333;
+      font-size: 18px;
+      margin: 0 10px;
+    }
+    
+    .carousel-section .card {
+      width: 250px;
+      margin: 0 auto;
+    }
+  </style>
+        <style>
+          .card {
+            height: 100%;
+          }
+        
+          .image-container {
+            height: 100%;
+            padding-right: 0; /* Remove any padding on the right side */
+            overflow: hidden; /* Ensure that the image doesn't overflow the container */
+          }
+  
+          .image-container img {
+            height: 100%; /* Slightly increase the height of the image */
+            width: 100%; /* Keep the width auto to maintain aspect ratio */
+            object-fit: cover; /* Ensures the image covers the container */
+            border-radius: 10px; /* Add rounded corners to the image */
+            margin-left: -5%; /* Center the image by shifting it left */
+          }
+        
+          .star-rating {
+            display: flex;
+            align-items: center;
+          }
+        
+          .star {
+            color: #ccc; /* Default color for unfilled stars */
+            font-size: 20px;
+          }
+
+           .star.filled {
+            color: #FFD700; /* Gold color for filled stars */
+          }
+
+        
+          .rating-number {
+            margin-left: 10px;
+            font-weight: bold;
+          }
+        </style>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+  <section class="section bg-primary text-white" style="height: 750px; margin-bottom: 50px;">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="text-center">
+          <style>
+            @import url('https://fonts.googleapis.com/css2?family=Grey+Qo&display=swap');
+          </style>
+          <h1 class="fw-bolder display-2" style="margin-top: 40px; font-family: 'Grey Qo', cursive; font-weight: 400; font-style: normal; font-size: 100px; background: linear-gradient(to bottom, #D77A61, #FFFFFF); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Trip to Penang</h1>
+          <h2 class="lead fw-normal text-muted mb-4 px-lg-7" style="margin-top: 24px;">
+            Discover your dream trip with real-time weather updates, flight details, and personalized travel suggestions tailored just for you.
+          </h2>
+        </div>
+
+        <div class="container mt-4">
+          <div class="row justify-content-center">
+            <div class="col-11">
+              <div class="input-group" style="height: 52px;">
+                <input type="text" class="form-control" style="font-size: large;" id="searchDestination" placeholder="Where do you want to go?" aria-label="Search" aria-describedby="basic-addon2">
+                <span class="input-group-text" id="basic-addon2"><span class="fas fa-search"></span></span>
+              </div>
+              <ul class="dropdown-menu" style="width: 65%;" id="dropdownMenu" aria-labelledby="searchDestination">
+                <li>
+                  <a class="dropdown-item d-flex align-items-center" href="#" onclick="selectLocation('Penang Island')">
+                    <span class="fas fa-map-marker-alt me-2 text-primary"></span>
+                    <div>
+                      <span style="color: black;">Penang Island</span><br>
+                      <small style="color: grey;">Penang, Malaysia</small>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item d-flex align-items-center" href="#" onclick="selectLocation('Butterworth')">
+                    <span class="fas fa-map-marker-alt me-2 text-primary"></span>
+                    <div>
+                      <span style="color: black;">Butterworth</span><br>
+                      <small style="color: grey;">Northeast Penang Island, Penang, Malaysia</small>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <script>
+          function selectLocation(location) {
+            document.getElementById('searchDestination').value = location;
+            document.getElementById('dropdownMenu').classList.remove('show');
+          }
+
+          const searchInput = document.getElementById('searchDestination');
+          searchInput.addEventListener('focus', function() {
+            document.getElementById('dropdownMenu').classList.add('show');
+          });
+
+          document.addEventListener('click', function(event) {
+            const isClickInside = searchInput.contains(event.target) || document.getElementById('dropdownMenu').contains(event.target);
+            if (!isClickInside) {
+              document.getElementById('dropdownMenu').classList.remove('show');
+            }
+          });
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        
+        <form method="post" action="">
+          {% csrf_token %}
+          <div class="col-12">
+            <div class="row align-items-center" style="margin-top: 32px;">
+              <div class="row" style="margin: auto;">
+                <div class="col" style="margin: 16px;">
+                  <label class="my-1 me-2" for="fromLocation">From</label>
+                  {{ form.from_location }}
+                </div>
+                <div class="col" style="margin: 16px;">
+                  <label class="my-1 me-2" for="toLocation">To</label>
+                  {{ form.to_location }}
+                </div>
+              </div>
+              
+            </div>
+          </div>
+          
+
+          <div class="row justify-content-center" style="margin-top:32px">
+            <div class="col-4">
+              <div class="row align-items-center" style="margin-top: 32px;">
+                <a button class="btn" style="height: 50px; border-radius: 24px; background-color: #D77A61; color: white; font-size: larger;" href="{% url 'pages/keywords' %}">Next</button>
+                </a>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+<div class="row justify-content-center mb-5">
+  <!-- Cards introduce Trip Highlights Section -->
+  <div class="container" style="max-width: 95vw;">
+    <h1 class="fw-bolder">Explore Penang</h1>
+    <h2 class="lead" style="margin-bottom: 24px;">Uncover the Best of Culture, Nature, and Cuisine in Penang</h2>
+  
+    <div class="row">
+      <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4 px-3">
+        <a href="{% url 'place_category' %}?category=Cultural Heritage" class="card-link">
+          <div class="card border-dark h-100">
+            <img src="{% static 'assets/img/cultural_heritage.jpg' %}" class="card-img-top rounded-top" alt="image">
+            <div class="card-body">
+              <h5 class="card-title mt-3">Cultural Heritage</h5>
+            </div>
+          </div>
+        </a>
+      </div>
+  
+      <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4 px-3">
+        <a href="{% url 'place_category' %}?category=Nature and Scenery" class="card-link">
+          <div class="card border-dark h-100">
+            <img src="{% static 'assets/img/nature.jpg' %}" class="card-img-top rounded-top" alt="image">
+            <div class="card-body">
+              <h5 class="card-title mt-3">Nature and Scenery</h5>
+            </div>
+          </div>
+        </a>
+      </div>
+  
+      <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4 px-3">
+        <a href="{% url 'place_category' %}?category=Culinary Excellence" class="card-link">
+          <div class="card border-dark h-100">
+            <img src="{% static 'assets/img/culinary_excellence.jpg' %}" class="card-img-top rounded-top" alt="image">
+            <div class="card-body">
+              <h5 class="card-title mt-3">Culinary Excellence</h5>
+            </div>
+          </div>
+        </a>
+      </div>
+  
+      <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4 px-3">
+        <a href="{% url 'place_category' %}?category=Unique Landmark and Experiences" class="card-link">
+          <div class="card border-dark h-100">
+            <img src="{% static 'assets/img/unique_landmark.jpg' %}" class="card-img-top rounded-top" alt="image">
+            <div class="card-body">
+              <h5 class="card-title mt-3">Unique Landmarks</h5>
+            </div>
+          </div>
+        </a>
+      </div>
+  
+      <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4 px-3">
+        <a href="{% url 'place_category' %}?category=Adventures" class="card-link">
+          <div class="card border-dark h-100">
+            <img src="{% static 'assets/img/adventures.jpg' %}" class="card-img-top rounded-top" alt="image">
+            <div class="card-body">
+              <h5 class="card-title mt-3">Adventures</h5>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+  <!-- End of Cards introduce Trip Highlights Section -->
+  
+
+  <div class="row justify-content-center mb-5">
+    <!-- Top Local Foods in Penang -->
+    <div class="container" style="max-width: 95vw; margin-top: 50px;">
+      <h1 class="fw-bolder">Top Local Food in Penang</h1>
+      <h2 class="lead" style="margin-bottom: 30px;">Discover Penang’s Unique Blend of History, Flavor, and Nature</h2>
+    </div>
+
+    <div class="row">
+      {% for category in category %}
+      <div class="col-12 col-md-6 col-lg-4 mb-4">
+        <div class="card border-light h-100">
+          <div class="row no-gutters align-items-center">
+            <div class="col-md-4 image-container" >
+              <img src="{{ category.photo_main }}" class="card-img rounded-left" style="height: 200px" alt="{{ category.title }}">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <!-- Heart icon for adding to interested list -->
+                <i class="fas fa-heart love-icon" data-url="{% url 'pages/favourite' %}" onclick="toggleLove(this)"></i>
+                <a href="#"><h5 class="card-title">{{ category.title }}</h5></a>
+                <p class="mb-2"> Price range: {{ category.fee }}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <!-- Star Rating -->
+                  <div class="star-rating">
+                    {% for i in "12345" %}
+                      <span class="star {% if i|floatformat:0 <= category.rating|floatformat:0 %}filled{% endif %}" data-value="{{ i }}">&#9733;</span>
+                    {% endfor %}
+                    <span class="rating-number">{{ category.rating|floatformat:1 }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+  
+
+<!--  Trip Festival in Penang Section -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Include Owl Carousel CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+
+    <!-- Include jQuery (required for Owl Carousel) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Include Owl Carousel JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+    <style>
+        .carousel-section {
+            margin-bottom: 90px;
+        }
+        .owl-nav button {
+            background-color: transparent;
+            border: none;
+            color: #333;
+            font-size: 18px;
+            margin: 0 10px;
+        }
+        .carousel-section .card {
+            width: 250px;
+            height: 500px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+
+<main>
+    <div class="container carousel-section" style="max-width: 85%; margin: 0 auto;">
+      <div class="col-12 col-md-9 col-lg-8 text-center mx-auto" style="margin-top: 50px;">
+        <h1 class="h1 mb-4">Memorable Trips Await You</h1>
+        <p class="lead">Explore interesting festivels, discover new cultures, and embark on adventures that will create unforgettable memories.</p>
+      </div>
+        <div class="owl-carousel owl-theme">
+            {% for event in festival %}
+            <div class="item">
+                <div class="card">
+                    <img src="{{ event.photo_main }}" class="card-img-top" alt="{{ event.title }}">
+                    <div class="card-body text-center">
+                        <h5>{{ event.title }}</h5>
+                        <p class="mb-2">{{ event.header }}</p> <!-- Display estimated date -->
+                        <a href="{% url 'festival_details' event.id %}" class="btn btn-primary mt-3">More Info</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</main>
+
+<script>
+    $(document).ready(function(){
+        $(".owl-carousel").owlCarousel({
+            loop: true,
+            margin: 10,
+            nav: true,
+            responsive: {
+                0: { items: 1 },
+                600: { items: 3 },
+                1000: { items: 5 }
+            }
+        });
+    });
+</script>
+
+
+<iframe title="Penang Visitors" width="1140" height="541.25" src="https://app.fabric.microsoft.com/reportEmbed?reportId=894069cd-909a-41d8-9c8f-9b6f735a54be&autoAuth=true&ctid=d494e113-528e-40ab-90d9-162de2fca3f3" frameborder="0" allowFullScreen="true"></iframe>
+</body>
+</html>
+
+{% endblock content %}

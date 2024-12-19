@@ -1,0 +1,138 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block content %}
+
+<main>
+    <div class="sections" style="height: 80px; background-color: rgba(27,37,64,255); margin-bottom: 50px;"></div>
+    <section class="section bg-primary text-white" style="height: auto; margin-bottom: 50px;">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="text-center">
+            <style>
+              @import url('https://fonts.googleapis.com/css2?family=Grey+Qo&display=swap');
+              </style>
+            <h1 class="fw-bolder display-2" style="margin-top: 40px; font-family: 'Grey Qo', cursive; font-weight: 400; font-style: normal; font-size: 100px; background: linear-gradient(to bottom, #D77A61, #FFFFFF); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Trip to Penang
+            </h1>
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Grey+Qo&family=Lemon&display=swap');
+                </style>
+            <h2 class="lead fw-normal text-white mb-4 px-lg-7" style="margin-top: 24px; font-family: 'Lemon', serif; font-weight: 400; font-style: normal; font-size: 40px;">
+                When are you GOING?
+            </h2>
+
+            <form method="post" action="{% url 'pages/keywords' %}">
+                {% csrf_token %}
+                <div class="row align-items-center">
+                    <div class="col-6">
+                        <label class="h6" for="startDate">Start Date</label>
+                        <div class="form-group">
+                            <div class="input-group" style="width: 100%; height: 52px;">
+                                <span class="input-group-text" id="basic-addonDate2">
+                                    <span class="fas fa-calendar-alt"></span>
+                                </span>
+                                <!-- Start Date Field with name attribute -->
+                                <input type="date" name="start_date" id="startDate" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <label class="h6" for="endDate">End Date</label>
+                        <div class="form-group">
+                            <div class="input-group" style="width: 100%; height: 52px;">
+                                <span class="input-group-text" id="basic-addonDate3">
+                                    <span class="fas fa-calendar-alt"></span>
+                                </span>
+                                <!-- End Date Field with name attribute -->
+                                <input type="date" name="end_date" id="endDate" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+
+            <h2 class="lead fw-normal text-white mb-4 px-lg-7" style="margin-top: 80px; font-family: 'Lemon', serif; font-weight: 400; font-style: normal; font-size: 40px;">
+                What are you LOOKING FOR?
+              </h2>
+            <h3 class="lead fw-normal text-light mb-4 px-lg-7" style="margin-top: 24px; font-family: 'Lemon', serif; font-weight: 400; font-style: normal; font-size: 24px; color: #fff;">
+                Select all that apply.
+              </h3>
+   
+         
+
+        <style>
+            /* Default button color */
+            .color-button {
+                background-color: #DBD3D8; /* Light color */
+                border: 1px solid #ced4da; border-radius: 24px;
+                color: #000; font-size: 17px;
+            }
+    
+            /* Active button color */
+            .color-button.active {
+                background-color: #F3B18D; /* Peach color when clicked */
+                color: #fff; /* White text when active */
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <form method="post" action="{% url 'pages/keywords' %}">
+            {% csrf_token %}
+            <div class="container mt-4">
+                <div class="row justify-content-between">
+                    <div class="col-auto" style="margin-bottom: 24px;">
+                        <button type="button" class="btn color-button mb-2 px-4 me-6" onclick="toggleColor(this)">Cultural Heritage</button>
+                        <button type="button" class="btn color-button mb-2 px-4 me-6" onclick="toggleColor(this)">Nature and Scenery</button>
+                        <button type="button" class="btn color-button mb-2 px-4 me-6" onclick="toggleColor(this)">Culinary Excellence</button>
+                        <button type="button" class="btn color-button mb-2 px-4" onclick="toggleColor(this)">Arts and Culture</button>
+                    </div>
+                    <div class="col-auto" style="margin-bottom: 24px;">
+                        <button type="button" class="btn color-button mb-2 px-4 me-7" onclick="toggleColor(this)">Unique Landmark and Experiences</button>
+                        <button type="button" class="btn color-button mb-2 px-4 me-7" onclick="toggleColor(this)">Adventures</button>
+                        <button type="button" class="btn color-button mb-2 px-4" onclick="toggleColor(this)">Local Crafts and Souvenirs</button>
+                    </div>
+                    <div class="col-auto" style="margin-bottom: 24px;">
+                        <button type="button" class="btn color-button mb-2 px-4 me-6" onclick="toggleColor(this)">Shopping Malls</button>
+                        <button type="button" class="btn color-button mb-2 px-4 me-6" onclick="toggleColor(this)">Streets and Night Markets</button>
+                        <button type="button" class="btn color-button mb-2 px-4 me-6" onclick="toggleColor(this)">Museums</button>
+                        <button type="button" class="btn color-button mb-2 px-4" onclick="toggleColor(this)">Restaurants and Cafes</button>
+                </div>
+            </div>
+        
+            <input type="hidden" id="selectedKeywords" name="keywords" value="">
+        
+            <script>
+                function toggleColor(button) {
+                    button.classList.toggle('active');
+                    let keyword = button.innerText;
+                    let selectedKeywords = document.getElementById('selectedKeywords').value.split(',').filter(Boolean);
+        
+                    if (button.classList.contains('active')) {
+                        if (!selectedKeywords.includes(keyword)) {
+                            selectedKeywords.push(keyword);
+                        }
+                    } else {
+                        selectedKeywords = selectedKeywords.filter(k => k !== keyword);
+                    }
+        
+                    document.getElementById('selectedKeywords').value = selectedKeywords.join(',');
+                }
+            </script>
+        
+            <!-- Submit button to submit the selected categories -->
+            <div class="row" style="margin-top:50px">
+                <div class="col">
+                    <a class="btn float-start" style="width: 150px; height: 50px; border-radius: 24px; background-color: #D77A61; color: white; font-size: larger;" href="{% url 'index' %}">Back</a>
+                </div>
+                <div class="col">
+                    <button type="submit" class="btn float-end" style="width: 150px; height: 50px; border-radius: 24px; background-color: #D77A61; color: white; font-size: larger;">Next</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+        
+    
+</main>
+
+{% endblock content %}

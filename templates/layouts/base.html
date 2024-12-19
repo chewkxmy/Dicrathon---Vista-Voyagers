@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!-- Primary Meta Tags -->
+    <title>Smart-Trips.my</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="title" content="Smart-Trip"> 
+    <meta name="description" content="Open source and free Bootstrap 5 UI Kit featuring 80 UI components, 5 example pages, and a Gulp and Sass workflow.">
+       
+    <!-- Fontawesome -->
+    <link type="text/css" href="{% static 'vendor/@fortawesome/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
+    
+    <!-- Pixel CSS -->
+    <link type="text/css" href="{% static 'css/pixel.css' %}" rel="stylesheet">
+    
+</head>
+
+<body>
+
+  {% block header %}
+  
+    {% include 'includes/navigation.html' %}
+  
+  {% endblock header %}
+
+  {% block content %}{% endblock content %}
+
+  {% block footer %}
+  
+    {% include 'includes/footer.html' %}
+  
+  {% endblock footer %}
+
+  {% include 'includes/scripts.html' %}
+  {% block javascripts %}{% endblock javascripts %}
+
+
+</body>
+
+</html>

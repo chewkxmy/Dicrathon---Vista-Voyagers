@@ -1,0 +1,88 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block content %}
+
+<main>
+    <div class="sections" style="height: 80px; background-color: rgba(27,37,64,255); margin-bottom: 50px;"></div>
+
+    <body>
+        <div class="col-12 col-md-9 col-lg-8 mt-4 text-center mx-auto">
+            <h1>Your Favourite List</h1>
+        </div>
+        <div id="bookmark-list" class="container">
+            <!-- Bookmarks will be loaded here -->
+        </div>
+
+        <!-- Button to clear all bookmarks -->
+        <div style="display: flex; justify-content: flex-end; margin-bottom: 40px;">
+            <div style="padding-right: 80px;">
+            <button class="btn btn-secondary dropdown-toggle" style="margin-left: 10px;" onclick="clearAllBookmarks()">Clear All Favourite</button>
+        </div>
+        </div>
+
+        <script>
+            function loadBookmarks() {
+                const bookmarks = JSON.parse(localStorage.getItem("bookmarks")) || [];
+                const listContainer = document.getElementById("bookmark-list");
+
+                listContainer.innerHTML = "";
+
+                if (bookmarks.length === 0) {
+                    listContainer.innerHTML = "<p>No bookmarks saved yet.</p>";
+                    return;
+                }
+
+                bookmarks.forEach((bookmark, index) => {
+                    const item = document.createElement("div");
+                    item.classList.add("bookmark-item");
+
+                    item.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 15px; padding: 10px;">
+                        <!-- Image Column -->
+                        <div style="flex-shrink: 0;">
+                            <img src="${bookmark.photo}" alt="${bookmark.title}" style="width: 230px; height: 150px; border-radius: 5px;">
+                        </div>
+
+                        <!-- Details Column -->
+                        <div style="flex-grow: 1;">
+                        <div class="bookmark-details" style="margin-left: 10px;">
+                           <strong style="font-size: 1.2em;">${bookmark.title}</strong><br>
+                           <span style="font-size: 1.0em;">(${bookmark.category})</span><br>
+                           <span style="font-size: 1.0em;">Rating: ${bookmark.rating} &#9733;</span>
+                        </div>
+                        </div>
+
+                        <!-- Remove Button Column -->
+                        <div style="flex-shrink: 0;">
+                            <span class="badge bg-danger" style="padding: 8px 12px; border-radius: 10px;width: 80px;height: 40px;display: flex; align-items: center; justify-content: center;">
+                                <a href="#" onclick="deleteBookmark(${index})" style="text-decoration: none; color: white;font-size: 16px;">Remove</a>
+                            </span>
+                        </div>
+                    </div>
+
+                    <hr>
+                `;
+
+                    listContainer.appendChild(item);
+                });
+            }
+
+            function deleteBookmark(index) {
+                const bookmarks = JSON.parse(localStorage.getItem("bookmarks")) || [];
+                bookmarks.splice(index, 1);
+                localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
+                loadBookmarks();
+            }
+
+            function clearAllBookmarks() {
+                localStorage.removeItem("bookmarks");
+                loadBookmarks();
+            }
+
+            document.addEventListener("DOMContentLoaded", loadBookmarks);
+        </script>
+    </body>
+</main>
+
+
+{% endblock content %}

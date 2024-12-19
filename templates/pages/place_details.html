@@ -1,0 +1,176 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+   .organic-radius {
+    /* Define a specific width and height for the container */
+    width: 100%;
+    height: 90vh; /* Set this to control container height */
+    max-width: 900px; /* Control max width if needed */
+    position: relative;
+    overflow: hidden;
+    border-radius:  60% 40% 60% 40% / 50% 60% 50% 60%; /* Add rounded corners */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.organic-radius img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image covers the container */
+    border-radius: 10px;
+}
+
+    .star-rating {
+        display: flex;
+        align-items: center;
+    }
+
+    .star {
+        color: #ccc;
+        /* Default color for unfilled stars */
+        font-size: 20px;
+    }
+
+    .star.filled {
+        color: #FFD700;
+        /* Gold color for filled stars */
+    }
+
+
+    .rating-number {
+        margin-left: 10px;
+        font-weight: bold;
+    }
+</style>
+
+<main>
+    <div class="sections" style="height: 80px; background-color: rgba(27,37,64,255); margin-bottom: 50px;"></div>
+    <div class="row align-items-start justify-content-around mb-5">
+
+        <!-- Left Column (Image) -->
+        <div class="col-md-6 col-xl-6 mb-5 justify-content-center align-items-center">
+            <a href="{% url 'index'%}" class="back-link mb-3" style="text-decoration: none; color: inherit;">
+                ← Back 
+            </a>
+
+            <img class="organic-radius img-fluid" src="{{ place.photo_main }}" alt="{{ place.title }}">
+        </div>
+
+        <!-- Right Column (Text) -->
+        <div class="col-md-6 col-xl-5 text-md-left">
+            <h2 class="h1 mb-2">{{ place.title }}</h2>
+            <!-- Star Rating -->
+            <div class="star-rating">
+                {% for i in "12345" %}
+                <span class="star {% if i|floatformat:0 <= place.rating|floatformat:0 %}filled{% endif %}"
+                    data-value="{{ i }}">&#9733;</span>
+                {% endfor %}
+                <span class="rating-number">{{ place.rating|floatformat:1 }}</span>
+            </div>
+            <p class="lead" style="text-align: justify;">
+                {{ place.content }}
+                <span id="moreText" style="display: none;">
+                    {{ place.content_more }}
+                </span>
+                <a href="javascript:void(0);" id="toggleLink" onclick="toggleText()"
+                    style="color: #007bff; text-decoration: none;"> Show More</a>
+            </p>
+
+            <p class="lead" style="text-align: justify;">
+                <strong>Address:</strong><br>
+                {{ place.address }}
+            </p>
+
+            <p class="lead" style="text-align: justify;">
+                <strong>Contact Number:</strong><br>
+                {{ place.contact }}
+            </p>
+
+            <p class="lead" style="text-align: justify;">
+                {% if selected_category in fee_categories %}
+                    <strong>Fee:</strong><br>
+                    {{ place.fee|default:"Not specified" }}
+                {% elif selected_category in price_range_categories %}
+                    <strong>Price Range:</strong><br>
+                    {{ place.price_range|default:"Not specified" }}
+                {% else %}
+                <strong>**No fee or price range information available for this category.</strong><br>
+                {% endif %}
+            </p>       
+
+            <p class="lead" style="text-align: justify;">
+                <strong>Opening Hours:</strong><br>
+                <select id="opening-hours" class="form-select">
+                    <option value="monday">Monday: {{ place.monday }}</option>
+                    <option value="tuesday">Tuesday: {{ place.tuesday }}</option>
+                    <option value="wednesday">Wednesday: {{ place.wednesday }}</option>
+                    <option value="thursday">Thursday: {{ place.thursday }}</option>
+                    <option value="friday">Friday: {{ place.friday }}</option>
+                    <option value="saturday">Saturday: {{ place.saturday }}</option>
+                    <option value="sunday">Sunday: {{ place.sunday }}</option>
+                </select>
+            </p>
+
+            <p class="lead" style="text-align: justify;">
+                <strong>Type:</strong><br>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle w-100" type="button" id="typeDropdown"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{ place.in_outDoor }}
+                </button>
+                <div class="dropdown-menu w-100" aria-labelledby="typeDropdown">
+                    <a class="dropdown-item" href="#" disabled>Indoor</a>
+                    <a class="dropdown-item" href="#" disabled>Outdoor</a>
+                    <a class="dropdown-item" href="#" disabled>Outdoor & Indoor</a>
+                </div>
+            </div>
+            </p>
+
+            {% if place.website_link and place.website_link != "-" %}
+            <div class="visit">
+                <p class="lead" style="text-align: justify;">
+                    <strong> Visit Website: </strong><br>
+                    <a href="{{ place.website_link }}" button class="btn btn-secondary dropdown-toggle w-100" type="button" id="typeDropdown"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"">
+                        Learn more
+                    </a>
+                </p>
+            </div>
+        {% endif %}
+        
+        </div>
+    </div>
+    <!-- JavaScript for toggling -->
+    <script>
+        function toggleText() {
+            var moreText = document.getElementById("moreText");
+            var toggleLink = document.getElementById("toggleLink");
+
+            if (moreText.style.display === "none") {
+                moreText.style.display = "inline";  // Show the hidden text
+                toggleLink.textContent = " Show Less";  // Change the clickable text
+            } else {
+                moreText.style.display = "none";    // Hide the extra text
+                toggleLink.textContent = " Show More";  // Change the clickable text
+            }
+        }
+
+        // JavaScript to set the default selected option based on the current day
+        document.addEventListener("DOMContentLoaded", function () {
+            // Get the current day as a number (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+            const currentDayIndex = new Date().getDay();
+
+            // Map of day indices to option values
+            const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+
+            // Select the dropdown and set the selected option based on the current day
+            const openingHoursDropdown = document.getElementById("opening-hours");
+            openingHoursDropdown.value = days[currentDayIndex];
+        });
+    </script>
+</main>
+
+{% endblock content %}
