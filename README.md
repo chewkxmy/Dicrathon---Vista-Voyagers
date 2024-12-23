@@ -9,7 +9,7 @@ Step 2: use terminal to download files from GitHUB
 Step 3: use terminal to install required module
   > pip install django
 
-Step 4: use terminal to run the code on local host
+Step 4: use terminal to run the code
   > python manage.py runserver
 
 Then click on the link provided in the terminal and a website should be displayed.
